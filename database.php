@@ -1,5 +1,5 @@
 <?php
-/* ------- The only class that handles all methods of the library
+/* ------- The only class that handles all methods of the library ------- */
 class DataBase
 {
 	/**
