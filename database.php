@@ -15,7 +15,7 @@ class DataBase
 	*/
 	private static function addString($text, $add, $type = 'prepand')
 	{
-		if ($type == 'prepand') {
+	if ($type == 'prepand') {
         	return $add . $text;
     	} else if ($type == 'append') {
         	return $text . $add;
