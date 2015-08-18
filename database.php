@@ -1,9 +1,10 @@
 <?php
-/* ------- The only class that handles all methods of the library ------- */
+
+
 class DataBase
 {
 	/**
-	* @var PDO instance
+	* @var PDO connection to the database
 	*/
 	private $connection;
 
@@ -13,9 +14,9 @@ class DataBase
 	* @param $add string - string to be appended or prepanded to the spedified string
 	* @param $type string - append or prepand
 	*/
-	private static function addString($text, $add, $type = 'prepand')
+	public static function addString($text, $add, $type = 'prepand')
 	{
-	if ($type == 'prepand') {
+		if ($type == 'prepand') {
         	return $add . $text;
     	} else if ($type == 'append') {
         	return $text . $add;
@@ -30,6 +31,14 @@ class DataBase
 	public function __Construct($PDO)
 	{
 		$this->connection = $PDO;
+	}
+	
+	/**
+	 * @return Database handle
+	 */
+	public function get_connection()
+	{
+		return $this->connection;
 	}
 
 	/**
@@ -98,46 +107,46 @@ class DataBase
 			if ($where == "" && $limit == null) {
 
 				// Build an sql query by creating a string of array keys seperated by commas
-				$sql = "SELECT " . implode(", ", $what) . " FROM $from";
+				$sql = "SELECT " . implode(", ", $what) . " FROM $from ORDER BY id DESC";
 
 				// Each time a new row is obtained from the database, yield it instantly
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else if ($where != "" && $limit == null) { // Same with where clause and without count
-				$sql = "SELECT " . implode(", ", $what) . " FROM $from WHERE $where";
+				$sql = "SELECT " . implode(", ", $what) . " FROM $from WHERE $where ORDER BY id DESC";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else if ($where == "" && $limit != null) { // Same without where clause and with count
-				$sql = "SELECT " . implode(", ", $what) . " FROM $from LIMIT $limit";
+				$sql = "SELECT " . implode(", ", $what) . " FROM $from ORDER BY id DESC LIMIT $limit";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else { // Same with where clause and count
-				$sql = "SELECT " . implode(", ", $what) . " FROM $from WHERE $where LIMIT $limit";
+				$sql = "SELECT " . implode(", ", $what) . " FROM $from WHERE $where ORDER BY id DESC LIMIT $limit";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			}
 		} else { // Same, in case of selecting everything with '*' or selecting only one row
 			if ($where == "" && $limit == null) {
-				$sql = "SELECT " . $what[0] . " FROM $from";
+				$sql = "SELECT " . $what[0] . " FROM $from ORDER BY id DESC";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else if ($where != "" && $limit == null) {
-				$sql = "SELECT " . $what[0] . " FROM $from WHERE $where";
+				$sql = "SELECT " . $what[0] . " FROM $from WHERE $where ORDER BY id DESC";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else if ($where == "" && $limit != null) {
-				$sql = "SELECT " . $what[0] . " FROM $from LIMIT $limit";
+				$sql = "SELECT " . $what[0] . " FROM $from ORDER BY id DESC LIMIT $limit";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
 			} else {
-				$sql = "SELECT " . $what[0] . " FROM $from WHERE $where LIMIT $limit";
+				$sql = "SELECT " . $what[0] . " FROM $from WHERE $where ORDER BY id DESC LIMIT $limit";
 				foreach ($this->connection->query($sql) as $row) {
 					yield $row;
 				}
